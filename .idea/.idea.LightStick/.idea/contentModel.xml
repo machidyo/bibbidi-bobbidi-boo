@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\yorih\AppData\Local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\yorih\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_LightStick.516314799.00" t="ExcludeRecursive" />
+    <e p="D:\10_unity\LightStick" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="Scripts" t="Include">
+          <e p="Extension" t="Include">
+            <e p="ByteArrayConvertExtension.cs" t="Include" />
+          </e>
+          <e p="Network" t="Include">
+            <e p="UDPReceiver.cs" t="Include" />
+          </e>
+          <e p="Ryap" t="Include">
+            <e p="ButtonData.cs" t="Include" />
+            <e p="Header.cs" t="Include" />
+            <e p="ImuData.cs" t="Include" />
+          </e>
+          <e p="Yeelight" t="Include">
+            <e p="MagicStick.cs" t="Include" />
+            <e p="PythonRunner.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="LightStick.sln" t="IncludeFlat" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Temp\Bin" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
