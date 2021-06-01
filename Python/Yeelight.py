@@ -1,7 +1,8 @@
 import sys
 from yeelight import Bulb
 
-bulb = Bulb("192.168.10.53")
+# IP for connecting to Yeelight
+bulb = Bulb("192.168.1.1")
 arg = int(sys.argv[1])
 
 bulb.turn_off()

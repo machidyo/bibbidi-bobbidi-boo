@@ -4,8 +4,10 @@ using Debug = UnityEngine.Debug;
 
 public class PythonRunner
 {
-    private static readonly string pyExePath = @"c:\Users\yorih\anaconda3\python.exe";
-    private static readonly  string pyCodePath = @"d:\14_python\Yeelight.py";
+    // Set up a file(ex python.exe, py.exe) to run python
+    private static readonly string pyExePath = @"c:\path\python.exe";
+    // Set up python code
+    private static readonly  string pyCodePath = @"d:\path\Yeelight.py";
 
     public static void SwitchLight(bool isOn)
     {
