@@ -2,6 +2,7 @@ import sys
 from yeelight import Bulb
 
 # IP for connecting to Yeelight
+# You can check YeeLight App, Device -> Setting -> Device Information.
 bulb = Bulb("192.168.1.1")
 arg = int(sys.argv[1])
 
