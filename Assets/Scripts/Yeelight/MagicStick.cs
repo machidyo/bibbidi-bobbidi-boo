@@ -24,6 +24,11 @@ public class MagicStick : MonoBehaviour
         udpReceiver = FindObjectOfType<UDPReceiver>();
     }
 
+    private void OnApplicationQuit()
+    {
+        Yeelight.SwitchLight(false);
+    }
+
     void Update()
     {
         CheckM5StickCAButton();
