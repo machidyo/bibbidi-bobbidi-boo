@@ -8,11 +8,7 @@ public class MagicStick : MonoBehaviour
     
     [SerializeField] private Text smallCircleText;
     [SerializeField] private Text bigShakeText;
-    
-    [SerializeField] private Text accX;
-    [SerializeField] private Text accY;
-    [SerializeField] private Text accZ;
-    
+
     private int smallCircle = 0;
     private int bigShake = 0;
     
@@ -30,8 +26,6 @@ public class MagicStick : MonoBehaviour
 
     async void Update()
     {
-        CheckM5StickCAButton();
-
         // move small circle (Bibbidi-Bobbidi-)
         if (udpReceiver.AccData[0] > 1.5 ||
             udpReceiver.AccData[1] > 1.5 ||
@@ -54,27 +48,22 @@ public class MagicStick : MonoBehaviour
             bigShake = 0;
         }
 
-        accX.text = $"{udpReceiver.AccData[0]}";
-        accY.text = $"{udpReceiver.AccData[1]}";
-        accZ.text = $"{udpReceiver.AccData[2]}";
         smallCircleText.text = $"{smallCircle}";
         bigShakeText.text = $"{bigShake}";
-    }
-
-    /// <summary>
-    /// for debug, check to connect M5StickC and Yeelight.
-    /// </summary>
-    private void CheckM5StickCAButton()
-    {
-        if (udpReceiver.IsButtonAClicked)
-        {
-            OnClicked();
-            udpReceiver.IsButtonAClicked = false;
-        }
     }
 
     public async void OnClicked()
     {
         await yeelightClient.TurnOff();
+    }
+    
+    public async void OnClicked1()
+    {
+        await yeelightClient.TurnOnALittle();
+    }
+    
+    public async void OnClicked2()
+    {
+        await yeelightClient.TurnOn();
     }
 }

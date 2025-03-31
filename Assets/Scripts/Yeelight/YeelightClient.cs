@@ -1,18 +1,23 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using YeelightAPI;
+using YeelightAPI.Models.ColorFlow;
 
 public class YeelightClient
 {
     private const string YEELIGHT_IP = "192.168.1.23";
     
-    private Device device;
+    private static Device device;
+    private bool isRunning = false;
     
     public YeelightClient()
     {
-        Debug.Log("Yeelightの初期化を開始します。");
-        device = new Device(YEELIGHT_IP);
-        Connect().Forget();
+        if (device == null)
+        {
+            Debug.Log("Yeelightの初期化を開始します。");
+            device = new Device(YEELIGHT_IP);
+            Connect().Forget();
+        }
     }
     private async UniTask Connect()
     {
@@ -36,23 +41,54 @@ public class YeelightClient
     public async UniTask TurnOff()
     {
         if (!IsConnected()) return;
+        if (isRunning) return;
+        
+        isRunning = true;
         await device.SetPower(false);
+        isRunning = false;
     }
 
     public async UniTask TurnOn()
     {
         if (!IsConnected()) return;
+        if (isRunning) return;
+        
+        isRunning = true;
         await device.SetPower();
         await device.SetBrightness(100);
         await device.SetRGBColor(255, 255, 255);
+        isRunning = false;
     }
 
     public async UniTask TurnOnALittle()
     {
         if (!IsConnected()) return;
+        if (isRunning) return;
+        
+        isRunning = true;
         await device.SetPower();
-        await device.SetBrightness(1);
-        await device.SetRGBColor(255, 255, 255);
+        
+        // Sample
+        // var flow = new ColorFlow(0, ColorFlowEndAction.Restore)
+        // {
+        //     new ColorFlowRGBExpression(255, 0, 0, 1, 500),      // color : red / brightness : 1% / duration : 500
+        //     new ColorFlowRGBExpression(0, 255, 0, 100, 500),    // color : green / brightness : 100% / duration : 500
+        //     new ColorFlowRGBExpression(0, 0, 255, 50, 500),     // color : blue / brightness : 50% / duration : 500
+        //     new ColorFlowSleepExpression(2000),                 // sleeps for 2 seconds
+        //     new ColorFlowTemperatureExpression(2700, 100, 500), // color temperature : 2700k / brightness : 100 / duration : 500
+        //     new ColorFlowTemperatureExpression(5000, 1, 500)    // color temperature : 5000k / brightness : 100 / duration : 500
+        // };
+
+        var flow = new ColorFlow(1, ColorFlowEndAction.Keep)
+        {
+            GetRandomColor(300),
+            GetRandomColor(300),
+            GetRandomColor(400),
+        };
+
+        await device.StartColorFlow(flow); // start
+        await UniTask.Delay(1000); // wait for 1 second
+        isRunning = false;
     }
 
     public async UniTask Toggle()
@@ -88,5 +124,21 @@ public class YeelightClient
             _ => new Color(255, 255, 255)
         };
         await device.SetRGBColor((int)color.r, (int)color.g, (int)color.b);
+    }
+    
+    private ColorFlowRGBExpression GetRandomColor(int duration)
+    {
+        var color = Random.Range(1, 8);
+        var brightness = Random.Range(1, 8);
+        return color switch
+        {
+            1 => new ColorFlowRGBExpression(255, 255,   0, brightness, duration),
+            2 => new ColorFlowRGBExpression(255,   0, 255, brightness, duration),
+            3 => new ColorFlowRGBExpression(  0, 255, 255, brightness, duration),
+            4 => new ColorFlowRGBExpression(255,   0,   0, brightness, duration),
+            5 => new ColorFlowRGBExpression(  0, 255,   0, brightness, duration),
+            6 => new ColorFlowRGBExpression(  0,   0, 255, brightness, duration),
+            _ => new ColorFlowRGBExpression(255, 255, 255, brightness, duration)
+        };
     }
 }
