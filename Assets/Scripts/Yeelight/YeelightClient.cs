@@ -2,13 +2,13 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using YeelightAPI;
 
-public class Yeelight
+public class YeelightClient
 {
     private const string YEELIGHT_IP = "192.168.1.23";
     
     private Device device;
     
-    public Yeelight()
+    public YeelightClient()
     {
         Debug.Log("Yeelightの初期化を開始します。");
         device = new Device(YEELIGHT_IP);
@@ -27,7 +27,7 @@ public class Yeelight
         }
     }
 
-    ~Yeelight()
+    ~YeelightClient()
     {
         device?.Disconnect();
         device?.Dispose();

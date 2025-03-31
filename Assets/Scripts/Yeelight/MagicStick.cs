@@ -16,16 +16,16 @@ public class MagicStick : MonoBehaviour
     private int smallCircle = 0;
     private int bigShake = 0;
     
-    private Yeelight yeelight;
+    private YeelightClient yeelightClient;
 
     void Start()
     {
-        yeelight = new Yeelight();
+        yeelightClient = new YeelightClient();
     }
 
     private async void OnApplicationQuit()
     {
-        await yeelight.TurnOff();
+        await yeelightClient.TurnOff();
     }
 
     async void Update()
@@ -49,7 +49,7 @@ public class MagicStick : MonoBehaviour
         // change the light color by Bibbidi-Bobbidi-Boo and reset
         if (smallCircle > 20 && bigShake > 1)
         {
-            await yeelight.TurnOn();
+            await yeelightClient.TurnOn();
             smallCircle = 0;
             bigShake = 0;
         }
@@ -75,6 +75,6 @@ public class MagicStick : MonoBehaviour
 
     public async void OnClicked()
     {
-        await yeelight.Toggle();
+        await yeelightClient.TurnOff();
     }
 }
