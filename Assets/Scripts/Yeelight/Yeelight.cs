@@ -6,18 +6,6 @@ public class Yeelight
 {
     private const string YEELIGHT_IP = "192.168.1.23";
     
-    private bool isConnected
-    {
-        get
-        {
-            if (device is not { IsConnected: true })
-            {
-                Debug.LogWarning("Yeelightに未接続です。");
-            }
-            return device is { IsConnected: true };
-        }
-    }
-
     private Device device;
     
     public Yeelight()
@@ -47,21 +35,30 @@ public class Yeelight
     
     public async UniTask TurnOff()
     {
-        if (!isConnected) return;
+        if (!IsConnected()) return;
         await device.SetPower(false);
     }
 
     public async UniTask TurnOn()
     {
-        if (!isConnected) return;
+        if (!IsConnected()) return;
         await device.SetPower();
         await device.SetRGBColor(255, 255, 255);
     }
 
     public async UniTask Toggle()
     {
-        if (!isConnected) return;
+        if (!IsConnected()) return;
         await device.Toggle();
+    }
+
+    private bool IsConnected()
+    {
+        if (device is not { IsConnected: true })
+        {
+            Debug.LogWarning("Yeelightに未接続です。");
+        }
+        return device is { IsConnected: true };
     }
 
     private async void TurnOnWithRandomColor()
