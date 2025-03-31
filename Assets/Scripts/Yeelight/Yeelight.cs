@@ -6,16 +6,20 @@ public class Yeelight
     private const string YEELIGHT_IP = "192.168.1.23";
     
     private static Device device;
+
+    static Yeelight()
+    {
+        device = new Device(YEELIGHT_IP);
+        Connect().Forget();
+    }
+    private static async UniTask Connect()
+    {
+        await device.Connect();
+        Debug.Log("Connected to Yeelight");
+    }
     
     public static async void SwitchLight(bool isOn)
     {
-        if (device == null)
-        {
-            device = new Device(YEELIGHT_IP);
-            await device.Connect();
-            Debug.Log("Connected to Yeelight");
-        }
-        
         if (!isOn)
         {
             TurnOff();
