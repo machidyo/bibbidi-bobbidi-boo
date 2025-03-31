@@ -4,6 +4,8 @@ using RyapUnity.Network;
 
 public class MagicStick : MonoBehaviour
 {
+    [SerializeField] private UDPReceiver udpReceiver;
+    
     [SerializeField] private Text smallCircleText;
     [SerializeField] private Text bigShakeText;
     
@@ -11,21 +13,19 @@ public class MagicStick : MonoBehaviour
     [SerializeField] private Text accY;
     [SerializeField] private Text accZ;
     
-    private UDPReceiver udpReceiver;
-    
-    private bool isOn = true;
-
     private int smallCircle = 0;
     private int bigShake = 0;
+    
+    private Yeelight yeelight;
 
     void Start()
     {
-        udpReceiver = FindObjectOfType<UDPReceiver>();
+        yeelight = new Yeelight();
     }
 
     private async void OnApplicationQuit()
     {
-        await Yeelight.TurnOff();
+        await yeelight.TurnOff();
     }
 
     async void Update()
@@ -49,7 +49,7 @@ public class MagicStick : MonoBehaviour
         // change the light color by Bibbidi-Bobbidi-Boo and reset
         if (smallCircle > 20 && bigShake > 1)
         {
-            await Yeelight.SwitchLight(true);
+            await yeelight.TurnOn();
             smallCircle = 0;
             bigShake = 0;
         }
@@ -75,7 +75,6 @@ public class MagicStick : MonoBehaviour
 
     public async void OnClicked()
     {
-        isOn = !isOn;
-        await Yeelight.SwitchLight(isOn);
+        await yeelight.Toggle();
     }
 }

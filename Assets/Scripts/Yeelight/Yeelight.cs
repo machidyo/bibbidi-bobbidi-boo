@@ -6,43 +6,59 @@ public class Yeelight
 {
     private const string YEELIGHT_IP = "192.168.1.23";
     
-    private static Device device;
-
-    static Yeelight()
+    private bool isConnected
     {
+        get
+        {
+            if (device is not { IsConnected: true })
+            {
+                Debug.LogWarning("Yeelightに未接続です。");
+            }
+            return device is { IsConnected: true };
+        }
+    }
+
+    private static Device device;
+    
+    public Yeelight()
+    {
+        Debug.Log("Yeelightの初期化を開始します。");
         device = new Device(YEELIGHT_IP);
         Connect().Forget();
     }
-    private static async UniTask Connect()
+    private async UniTask Connect()
     {
-        await device.Connect();
-        Debug.Log("Connected to Yeelight");
-    }
-    
-    public static async UniTask SwitchLight(bool isOn)
-    {
-        if (!isOn)
+        var isSuccess = await device.Connect();
+        if (isSuccess)
         {
-            await TurnOff();
+            Debug.Log("Yeelightに接続しました。");
         }
         else
         {
-            await TurnOn();
-        } 
+            Debug.LogError("Yeelightの接続に失敗しました。");
+        }
     }
-
-    public static async UniTask TurnOff()
+    
+    public async UniTask TurnOff()
     {
+        if (!isConnected) return;
         await device.SetPower(false);
     }
 
-    public static async UniTask TurnOn()
+    public async UniTask TurnOn()
     {
+        if (!isConnected) return;
         await device.SetPower();
         await device.SetRGBColor(255, 255, 255);
     }
 
-    private static async void TurnOnWithRandomColor()
+    public async UniTask Toggle()
+    {
+        if (!isConnected) return;
+        await device.Toggle();
+    }
+
+    private async void TurnOnWithRandomColor()
     {
         var arg = Random.Range(1, 8);
         Debug.Log($"arg = {arg}");
