@@ -45,7 +45,7 @@ public class MagicStick : MonoBehaviour
         // change the light color by Bibbidi-Bobbidi-Boo and reset
         if (smallCircle > 20 && bigShake > 1)
         {
-            PythonRunner.SwitchLight(true);
+            Yeelight.SwitchLight(true);
             smallCircle = 0;
             bigShake = 0;
         }
@@ -72,6 +72,6 @@ public class MagicStick : MonoBehaviour
     public void OnClicked()
     {
         isOn = !isOn;
-        PythonRunner.SwitchLight(isOn);
+        Yeelight.SwitchLight(isOn);
     }
 }
