@@ -29,7 +29,7 @@ public class MagicStick : MonoBehaviour
         Yeelight.TurnOff();
     }
 
-    void Update()
+    async void Update()
     {
         CheckM5StickCAButton();
 
@@ -50,7 +50,7 @@ public class MagicStick : MonoBehaviour
         // change the light color by Bibbidi-Bobbidi-Boo and reset
         if (smallCircle > 20 && bigShake > 1)
         {
-            Yeelight.SwitchLight(true);
+            await Yeelight.SwitchLight(true);
             smallCircle = 0;
             bigShake = 0;
         }
@@ -74,9 +74,9 @@ public class MagicStick : MonoBehaviour
         }
     }
 
-    public void OnClicked()
+    public async void OnClicked()
     {
         isOn = !isOn;
-        Yeelight.SwitchLight(isOn);
+        await Yeelight.SwitchLight(isOn);
     }
 }

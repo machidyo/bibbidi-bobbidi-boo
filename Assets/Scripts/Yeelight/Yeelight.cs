@@ -1,4 +1,5 @@
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 using YeelightAPI;
 
 public class Yeelight
@@ -18,24 +19,24 @@ public class Yeelight
         Debug.Log("Connected to Yeelight");
     }
     
-    public static async void SwitchLight(bool isOn)
+    public static async UniTask SwitchLight(bool isOn)
     {
         if (!isOn)
         {
-            TurnOff();
+            await TurnOff();
         }
         else
         {
-            TurnOn();
+            await TurnOn();
         } 
     }
 
-    public static async void TurnOff()
+    public static async UniTask TurnOff()
     {
         await device.SetPower(false);
     }
 
-    public static async void TurnOn()
+    public static async UniTask TurnOn()
     {
         await device.SetPower();
         await device.SetRGBColor(255, 255, 255);
