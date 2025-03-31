@@ -18,7 +18,7 @@ public class Yeelight
         }
     }
 
-    private static Device device;
+    private Device device;
     
     public Yeelight()
     {
