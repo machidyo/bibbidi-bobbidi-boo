@@ -3,6 +3,8 @@ using YeelightAPI;
 
 public class Yeelight
 {
+    private const string YEELIGHT_IP = "192.168.1.23";
+    
     private static Device device;
     
     public static async void SwitchLight(bool isOn)
@@ -12,7 +14,7 @@ public class Yeelight
 
         if (device == null)
         {
-            device = new Device("192.168.1.23");
+            device = new Device(YEELIGHT_IP);
             await device.Connect();
             Debug.Log("Connected to Yeelight");
         }
