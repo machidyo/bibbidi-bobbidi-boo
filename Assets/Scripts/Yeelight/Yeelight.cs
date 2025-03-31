@@ -38,6 +38,12 @@ public class Yeelight
             Debug.LogError("Yeelightの接続に失敗しました。");
         }
     }
+
+    ~Yeelight()
+    {
+        device?.Disconnect();
+        device?.Dispose();
+    }
     
     public async UniTask TurnOff()
     {
