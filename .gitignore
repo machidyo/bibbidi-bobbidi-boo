@@ -61,3 +61,6 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# Packges
+Assets/Packages.meta
+Assets/Packages/*
