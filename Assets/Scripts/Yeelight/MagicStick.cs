@@ -1,7 +1,6 @@
-using RyapUnity.Network;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
+using RyapUnity.Network;
 
 public class MagicStick : MonoBehaviour
 {
@@ -41,9 +40,9 @@ public class MagicStick : MonoBehaviour
             smallCircle++;
         }
         // move big shake (Boo)
-        if (udpReceiver.AccData[0] > 2 ||
-            udpReceiver.AccData[1] > 2 ||
-            udpReceiver.AccData[2] > 2)
+        if (udpReceiver.AccData[0] > 5 ||
+            udpReceiver.AccData[1] > 5 ||
+            udpReceiver.AccData[2] > 5)
         {
             bigShake++;
         }
