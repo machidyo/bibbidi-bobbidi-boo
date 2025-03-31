@@ -43,6 +43,15 @@ public class YeelightClient
     {
         if (!IsConnected()) return;
         await device.SetPower();
+        await device.SetBrightness(100);
+        await device.SetRGBColor(255, 255, 255);
+    }
+
+    public async UniTask TurnOnALittle()
+    {
+        if (!IsConnected()) return;
+        await device.SetPower();
+        await device.SetBrightness(1);
         await device.SetRGBColor(255, 255, 255);
     }
 
