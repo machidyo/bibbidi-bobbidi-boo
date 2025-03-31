@@ -26,7 +26,7 @@ public class MagicStick : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        Yeelight.SwitchLight(false);
+        Yeelight.TurnOff();
     }
 
     void Update()

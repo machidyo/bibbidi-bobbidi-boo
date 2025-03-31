@@ -18,14 +18,23 @@ public class Yeelight
         
         if (!isOn)
         {
-            await device.SetPower(false);
+            TurnOff();
         }
         else
         {
-            TurnOnWithRandomColor();
+            TurnOn();
         } 
+    }
 
-        Debug.Log("Switched the light without python");
+    public static async void TurnOff()
+    {
+        await device.SetPower(false);
+    }
+
+    public static async void TurnOn()
+    {
+        await device.SetPower();
+        await device.SetRGBColor(255, 255, 255);
     }
 
     private static async void TurnOnWithRandomColor()
