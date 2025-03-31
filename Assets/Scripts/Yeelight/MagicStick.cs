@@ -33,9 +33,9 @@ public class MagicStick : MonoBehaviour
         CheckM5StickCAButton();
 
         // move small circle (Bibbidi-Bobbidi-)
-        if (udpReceiver.AccData[0] > 1 ||
-            udpReceiver.AccData[1] > 1 ||
-            udpReceiver.AccData[2] > 1)
+        if (udpReceiver.AccData[0] > 1.5 ||
+            udpReceiver.AccData[1] > 1.5 ||
+            udpReceiver.AccData[2] > 1.5)
         {
             smallCircle++;
         }
