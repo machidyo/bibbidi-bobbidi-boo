@@ -24,9 +24,9 @@ public class MagicStick : MonoBehaviour
         udpReceiver = FindObjectOfType<UDPReceiver>();
     }
 
-    private void OnApplicationQuit()
+    private async void OnApplicationQuit()
     {
-        Yeelight.TurnOff();
+        await Yeelight.TurnOff();
     }
 
     async void Update()
