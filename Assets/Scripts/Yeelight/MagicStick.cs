@@ -24,79 +24,59 @@ public class MagicStick : MonoBehaviour
     private float bibbidiChargeTime = 0;
     private float bibbidiStoppingTime = 0;
     private int booCharge = 0;
+    private float booTime = 0;
     
     private YeelightClient yeelightClient;
-
-    private CompositeDisposable disposable = new();
 
     void Start()
     {
         yeelightClient = new YeelightClient();
-        
-        var isRunning = false;
-        magicStats.DistinctUntilChanged()
-            .Where(_ => !isRunning)
-            .Subscribe( async stats =>
-            {
-                try
-                {
-                    isRunning = true;
-                    switch (stats)
-                    {
-                        case MagicStats.None:
-                            Debug.Log("TurnOff");
-                            await yeelightClient.TurnOff();
-                            await UniTask.Delay(1000);
-                            break;
-                        case MagicStats.Bibbidi:
-                            Debug.Log("TurnOnALittle");
-                            await yeelightClient.TurnOnALittle();
-                            break;
-                        case MagicStats.Boo:
-                            Debug.Log("TurnOn");
-                            await yeelightClient.TurnOn();
-                            await UniTask.Delay(1000);
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException(nameof(stats), stats, null);
-                    }
-                }
-                catch (Exception e)
-                {
-                    // エラーは投げ捨てる
-                }
-                finally
-                {
-                    isRunning = false;
-                }
-            }).AddTo(disposable);
-    }
-    
-    private void OnDestroy()
-    {
-        disposable.Dispose();
+        SwitchYeelight().Forget();
     }
 
     private async void OnApplicationQuit()
     {
-        await yeelightClient.TurnOff();
+        if (yeelightClient != null)
+        {
+            await yeelightClient.TurnOff();
+        }
     }
 
     void Update()
     {
+        if (magicStats.Value == MagicStats.Boo)
+        {
+            booTime += Time.deltaTime;
+            if (booTime < 3.0)
+            {
+                Debug.Log("Boo time now");
+                return;
+            }
+            else
+            {
+                Debug.Log("Boo time over");
+                magicStats.Value = MagicStats.None;
+                booTime = 0;
+            }
+        }
+        else
+        {
+            booTime = 0;
+        }
+        
         // big shake (to Boo or fault)
         if (udpReceiver.AccData[0] >= 5 ||
             udpReceiver.AccData[1] >= 5 ||
             udpReceiver.AccData[2] >= 5)
         {
-            if (bibbidiChargeTime < 2.0)
+            if (bibbidiChargeTime < 0.5)
             {
-                Debug.Log("fault: Boo but you have to do bibbidi before");
+                Debug.Log($"fault: Boo but you have to do bibbidi before, {bibbidiChargeTime}");
                 bibbidiChargeTime = 0;
             }
             else
             {
-                // Debug.Log("Boo");
+                Debug.Log("Boo");
                 booCharge++;
             }
         }
@@ -113,7 +93,7 @@ public class MagicStick : MonoBehaviour
         {
             // Debug.Log($"No magic, {bibbidiStoppingTime}");
             bibbidiStoppingTime += Time.deltaTime;
-            if (bibbidiStoppingTime > 1.0)
+            if (bibbidiStoppingTime > 0.6)
             {
                 bibbidiChargeTime = 0;
             }
@@ -122,7 +102,7 @@ public class MagicStick : MonoBehaviour
         bigShakeText.text = $"{bibbidiChargeTime:F2}, {bibbidiStoppingTime:F2}, {booCharge}";
         
         // change the light color by Bibbidi-Bobbidi-Boo and reset
-        if (bibbidiChargeTime >= 2.0 && booCharge >= 1)
+        if (bibbidiChargeTime >= 0.5 && booCharge >= 1)
         {
             magicStats.Value = MagicStats.Boo;
 
@@ -143,6 +123,46 @@ public class MagicStick : MonoBehaviour
         }
         
         smallCircleText.text = $"{magicStats}";
+    }
+
+    private async UniTask SwitchYeelight()
+    {
+        while (true)
+        {
+            try
+            {
+                switch (magicStats.Value)
+                {
+                    case MagicStats.None:
+                        Debug.Log("TurnOff");
+                        await yeelightClient.TurnOff();
+                        await UniTask.Delay(1000);
+                        break;
+                    case MagicStats.Bibbidi:
+                        Debug.Log("TurnOnALittle");
+                        await yeelightClient.TurnOnALittle();
+                        break;
+                    case MagicStats.Boo:
+                        Debug.Log("TurnOn");
+                        await yeelightClient.TurnOn();
+                        await UniTask.Delay(3000);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"Yeelightとの接続に問題が発生しました、再接続にトライします。{e}");
+                
+                // 少し間をおいてから接続に再挑戦する
+                await UniTask.Delay(500);
+
+                yeelightClient = new YeelightClient();
+
+                await UniTask.Delay(500);
+            }
+        }
     }
 
     public async void OnClicked()

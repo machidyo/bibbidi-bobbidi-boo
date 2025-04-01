@@ -7,20 +7,18 @@ public class YeelightClient
 {
     private const string YEELIGHT_IP = "192.168.1.23";
     
-    private static Device device;
+    private Device device;
     private bool isRunning = false;
     
     public YeelightClient()
     {
-        if (device == null)
-        {
-            Debug.Log("Yeelightの初期化を開始します。");
-            device = new Device(YEELIGHT_IP);
-            Connect().Forget();
-        }
+        Debug.Log("Yeelightの初期化を開始します。");
+        device = new Device(YEELIGHT_IP);
+        Connect().Forget();
     }
-    private async UniTask Connect()
+    private async UniTask<bool> Connect()
     {
+        Debug.Log("Yeelightに接続を開始します。");
         var isSuccess = await device.Connect();
         if (isSuccess)
         {
@@ -30,12 +28,27 @@ public class YeelightClient
         {
             Debug.LogError("Yeelightの接続に失敗しました。");
         }
+        return isSuccess;
     }
 
     ~YeelightClient()
     {
+        Debug.Log("START デコンストラクタ");
         device?.Disconnect();
         device?.Dispose();
+        Debug.Log("END   デコンストラクタ");
+    }
+    
+    public async UniTask<bool> Reconnect()
+    {
+        Debug.Log("Disconnect");
+        device?.Disconnect();
+        Debug.Log("Dispose");
+        device?.Dispose();
+        
+        Debug.Log("Yeelightの再接続を開始します。");
+        device = new Device(YEELIGHT_IP);
+        return await Connect();
     }
     
     public async UniTask TurnOff()
@@ -44,6 +57,7 @@ public class YeelightClient
         if (isRunning) return;
         
         isRunning = true;
+        await device.StopColorFlow(); 
         await device.SetPower(false);
         isRunning = false;
     }
@@ -82,12 +96,12 @@ public class YeelightClient
         var flow = new ColorFlow(1, ColorFlowEndAction.Keep)
         {
             GetRandomColor(300),
-            // GetRandomColor(300),
-            // GetRandomColor(400),
+            GetRandomColor(300),
+            GetRandomColor(400),
         };
 
         await device.StartColorFlow(flow);
-        await UniTask.Delay(300);
+        await UniTask.Delay(1000);
         isRunning = false;
     }
 
