@@ -24,6 +24,7 @@ public class MagicStick : MonoBehaviour
     [SerializeField] private UDPReceiver udpReceiver;
     
     [Header("DEBUG")]
+    [SerializeField] private Image background;
     [SerializeField] private Text smallCircleText;
     [SerializeField] private Text bigShakeText;
 
@@ -121,6 +122,7 @@ public class MagicStick : MonoBehaviour
         if (bibbidiChargeTime >= BIBBIDI_TIME_THRESHOLD && booCharge >= 1)
         {
             magicStats = MagicStats.Boo;
+            background.color = Color.green;
 
             bibbidiChargeTime = 0;
             bibbidiStoppingTime = 0;
@@ -131,11 +133,15 @@ public class MagicStick : MonoBehaviour
             magicStats = bibbidiChargeTime < BIBBIDI_TIME_THRESHOLD
                 ? MagicStats.Bibbidi
                 : MagicStats.Bobbidi;
+            background.color = magicStats == MagicStats.Bibbidi
+                ? Color.yellow
+                : Color.cyan;
         }
         else
         {
             magicStats = MagicStats.None;
-            
+            background.color = Color.gray;
+
             bibbidiChargeTime = 0;
             booCharge = 0;
         }
