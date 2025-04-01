@@ -85,17 +85,6 @@ public class YeelightClient
         await device.SetPower();
         await device.StopColorFlow();
         
-        // Sample
-        // var flow = new ColorFlow(0, ColorFlowEndAction.Restore)
-        // {
-        //     new ColorFlowRGBExpression(255, 0, 0, 1, 500),      // color : red / brightness : 1% / duration : 500
-        //     new ColorFlowRGBExpression(0, 255, 0, 100, 500),    // color : green / brightness : 100% / duration : 500
-        //     new ColorFlowRGBExpression(0, 0, 255, 50, 500),     // color : blue / brightness : 50% / duration : 500
-        //     new ColorFlowSleepExpression(2000),                 // sleeps for 2 seconds
-        //     new ColorFlowTemperatureExpression(2700, 100, 500), // color temperature : 2700k / brightness : 100 / duration : 500
-        //     new ColorFlowTemperatureExpression(5000, 1, 500)    // color temperature : 5000k / brightness : 100 / duration : 500
-        // };
-
         var flow = new ColorFlow(1, ColorFlowEndAction.Keep)
         {
             GetRandomColorAndBrightness(300),
@@ -172,6 +161,17 @@ public class YeelightClient
     
     private ColorFlowRGBExpression GetRandomColor(int brightness, int duration)
     {
+        // Sample
+        // var flow = new ColorFlow(0, ColorFlowEndAction.Restore)
+        // {
+        //     new ColorFlowRGBExpression(255, 0, 0, 1, 500),      // color : red / brightness : 1% / duration : 500
+        //     new ColorFlowRGBExpression(0, 255, 0, 100, 500),    // color : green / brightness : 100% / duration : 500
+        //     new ColorFlowRGBExpression(0, 0, 255, 50, 500),     // color : blue / brightness : 50% / duration : 500
+        //     new ColorFlowSleepExpression(2000),                 // sleeps for 2 seconds
+        //     new ColorFlowTemperatureExpression(2700, 100, 500), // color temperature : 2700k / brightness : 100 / duration : 500
+        //     new ColorFlowTemperatureExpression(5000, 1, 500)    // color temperature : 5000k / brightness : 100 / duration : 500
+        // };
+
         var color = Random.Range(1, 8);
         return color switch
         {
