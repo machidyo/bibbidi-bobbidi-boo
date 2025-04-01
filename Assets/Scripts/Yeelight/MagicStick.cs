@@ -27,6 +27,8 @@ public class MagicStick : MonoBehaviour
     
     private YeelightClient yeelightClient;
 
+    private CompositeDisposable disposable = new();
+
     void Start()
     {
         yeelightClient = new YeelightClient();
@@ -67,7 +69,12 @@ public class MagicStick : MonoBehaviour
                 {
                     isRunning = false;
                 }
-            });
+            }).AddTo(disposable);
+    }
+    
+    private void OnDestroy()
+    {
+        disposable.Dispose();
     }
 
     private async void OnApplicationQuit()
