@@ -7,15 +7,16 @@ using RyapUnity.Network;
 
 public class MagicStick : MonoBehaviour
 {
-    private const float BIBBIDI_TIME_THRESHOLD = 0.5f;
-    private const float BIBBIDI_STOP_TIME_THRESHOLD = 0.6f;
-    private const float BIBBIDI_ACCELERATION_THRESHOLD = 1.5f;
-    private const float BOO_ACCELERATION_THRESHOLD = 5.0f;
+    private const float BIBBIDI_TIME_THRESHOLD = 1.0f;
+    private const float BIBBIDI_STOP_TIME_THRESHOLD = 1.0f;
+    private const float BIBBIDI_ACCELERATION_THRESHOLD = 2.0f;
+    private const float BOO_ACCELERATION_THRESHOLD = 7.0f;
     
     private enum MagicStats
     {
         None,
         Bibbidi,
+        Bobbidi,
         Boo
     }
     
@@ -106,6 +107,10 @@ public class MagicStick : MonoBehaviour
             {
                 bibbidiChargeTime = 0;
             }
+            else if (magicStats is MagicStats.Bibbidi or MagicStats.Bobbidi)
+            {
+                bibbidiChargeTime += Time.deltaTime;
+            }
         }
 
         bigShakeText.text = $"{bibbidiChargeTime:F2}, {bibbidiStoppingTime:F2}, {booCharge}";
@@ -121,7 +126,9 @@ public class MagicStick : MonoBehaviour
         }
         else if (bibbidiChargeTime > 0.0)
         {
-            magicStats = MagicStats.Bibbidi;
+            magicStats = bibbidiChargeTime < BIBBIDI_TIME_THRESHOLD
+                ? MagicStats.Bibbidi
+                : MagicStats.Bobbidi;
         }
         else
         {
@@ -148,11 +155,12 @@ public class MagicStick : MonoBehaviour
                         await UniTask.Delay(1000);
                         break;
                     case MagicStats.Bibbidi:
-                        Debug.Log("TurnOnALittle");
-                        await yeelightClient.Bibbidi();
+                    case MagicStats.Bobbidi:
+                        Debug.Log("BibbidiBobbidi");
+                        await yeelightClient.BibbidiBobbidi();
                         break;
                     case MagicStats.Boo:
-                        Debug.Log("TurnOn");
+                        Debug.Log("Boo");
                         await yeelightClient.Boo();
                         break;
                     default:
@@ -180,7 +188,7 @@ public class MagicStick : MonoBehaviour
     
     public async void OnClicked1()
     {
-        await yeelightClient.Bibbidi();
+        await yeelightClient.BibbidiBobbidi();
     }
     
     public async void OnClicked2()

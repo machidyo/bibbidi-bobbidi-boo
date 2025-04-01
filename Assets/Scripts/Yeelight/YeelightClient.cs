@@ -76,25 +76,52 @@ public class YeelightClient
         isRunning = false;
     }
 
-    public async UniTask Bibbidi()
+    public async UniTask BibbidiBobbidi_Simple()
     {
         if (!IsConnected()) return;
         if (isRunning) return;
-        
         isRunning = true;
-        await device.SetPower();
-        await device.StopColorFlow();
         
         var flow = new ColorFlow(1, ColorFlowEndAction.Keep)
         {
-            GetRandomColorAndBrightness(300),
-            GetRandomColorAndBrightness(300),
-            GetRandomColorAndBrightness(400),
+            GetRandomColorAndBrightness(1000),
         };
+        await BibbidiBobbidi(flow);
+            
+        isRunning = false;
+    }
 
+    public async UniTask BibbidiBobbidi()
+    {
+        if (!IsConnected()) return;
+        if (isRunning) return;
+        isRunning = true;
+        
+        var flow = new ColorFlow(1, ColorFlowEndAction.Keep)
+        {
+            GetRandomColorAndBrightness(100),
+            GetRandomColorAndBrightness(100),
+            GetRandomColorAndBrightness(100),
+            GetRandomColorAndBrightness(100),
+            GetRandomColorAndBrightness(100),
+            GetRandomColorAndBrightness(100),
+            GetRandomColorAndBrightness(100),
+            GetRandomColorAndBrightness(100),
+            GetRandomColorAndBrightness(100),
+            GetRandomColorAndBrightness(100),
+        };
+        await BibbidiBobbidi(flow);
+            
+        isRunning = false;
+    }
+    
+    private async UniTask BibbidiBobbidi(ColorFlow flow)
+    {
+        await device.SetPower();
+        await device.StopColorFlow();
+        
         await device.StartColorFlow(flow);
         await UniTask.Delay(1000);
-        isRunning = false;
     }
     
     private bool isBooRunning = false;
@@ -158,7 +185,13 @@ public class YeelightClient
         var brightness = Random.Range(1, 8);
         return GetRandomColor(brightness, duration);
     }
-    
+
+    private ColorFlowRGBExpression GetRandomColorAndALittleBrightness(int duration)
+    {
+        var brightness = Random.Range(3, 5) * 4;
+        return GetRandomColor(brightness, duration);
+    }
+
     private ColorFlowRGBExpression GetRandomColor(int brightness, int duration)
     {
         // Sample
