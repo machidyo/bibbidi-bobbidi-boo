@@ -20,6 +20,7 @@ public class MagicStick : MonoBehaviour
         Boo
     }
     
+    [SerializeField] private SoundManager soundManager;
     [SerializeField] private UDPReceiver udpReceiver;
     
     [SerializeField] private Text smallCircleText;
@@ -157,10 +158,12 @@ public class MagicStick : MonoBehaviour
                     case MagicStats.Bibbidi:
                     case MagicStats.Bobbidi:
                         Debug.Log("BibbidiBobbidi");
+                        soundManager.PlaySound(SoundManager.SoundNames.BibbidiBobbidi);
                         await yeelightClient.BibbidiBobbidi();
                         break;
                     case MagicStats.Boo:
                         Debug.Log("Boo");
+                        soundManager.PlaySound(SoundManager.SoundNames.Boo);
                         await yeelightClient.Boo();
                         break;
                     default:
