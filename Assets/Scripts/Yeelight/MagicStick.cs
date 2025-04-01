@@ -31,7 +31,7 @@ public class MagicStick : MonoBehaviour
     void Start()
     {
         yeelightClient = new YeelightClient();
-        SwitchYeelight().Forget();
+        SwitchYeelightRepeatedlyByMagic().Forget();
     }
 
     private async void OnApplicationQuit()
@@ -125,7 +125,7 @@ public class MagicStick : MonoBehaviour
         smallCircleText.text = $"{magicStats}";
     }
 
-    private async UniTask SwitchYeelight()
+    private async UniTask SwitchYeelightRepeatedlyByMagic()
     {
         while (true)
         {
