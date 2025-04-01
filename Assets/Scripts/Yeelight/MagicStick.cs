@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
@@ -27,14 +28,18 @@ public class MagicStick : MonoBehaviour
     
     private YeelightClient yeelightClient;
 
+    private CancellationTokenSource yeelightSwithcer;
+
     void Start()
     {
         yeelightClient = new YeelightClient();
-        SwitchYeelightRepeatedlyByMagic().Forget();
+        yeelightSwithcer = new CancellationTokenSource();
+        SwitchYeelightRepeatedlyByMagic(yeelightSwithcer).Forget();
     }
 
     private async void OnApplicationQuit()
     {
+        yeelightSwithcer?.Cancel();
         if (yeelightClient != null)
         {
             await yeelightClient.TurnOff();
@@ -124,9 +129,9 @@ public class MagicStick : MonoBehaviour
         smallCircleText.text = $"{magicStats}";
     }
 
-    private async UniTask SwitchYeelightRepeatedlyByMagic()
+    private async UniTask SwitchYeelightRepeatedlyByMagic(CancellationTokenSource tokenSource)
     {
-        while (true)
+        while (!tokenSource.IsCancellationRequested)
         {
             try
             {
@@ -139,12 +144,11 @@ public class MagicStick : MonoBehaviour
                         break;
                     case MagicStats.Bibbidi:
                         Debug.Log("TurnOnALittle");
-                        await yeelightClient.TurnOnALittle();
+                        await yeelightClient.Bibbidi();
                         break;
                     case MagicStats.Boo:
                         Debug.Log("TurnOn");
-                        await yeelightClient.TurnOn();
-                        await UniTask.Delay(3000);
+                        await yeelightClient.Boo();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -171,7 +175,7 @@ public class MagicStick : MonoBehaviour
     
     public async void OnClicked1()
     {
-        await yeelightClient.TurnOnALittle();
+        await yeelightClient.Bibbidi();
     }
     
     public async void OnClicked2()

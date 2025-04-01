@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using YeelightAPI;
 using YeelightAPI.Models.ColorFlow;
+using Random = UnityEngine.Random;
 
 public class YeelightClient
 {
@@ -74,13 +76,14 @@ public class YeelightClient
         isRunning = false;
     }
 
-    public async UniTask TurnOnALittle()
+    public async UniTask Bibbidi()
     {
         if (!IsConnected()) return;
         if (isRunning) return;
         
         isRunning = true;
         await device.SetPower();
+        await device.StopColorFlow();
         
         // Sample
         // var flow = new ColorFlow(0, ColorFlowEndAction.Restore)
@@ -95,15 +98,36 @@ public class YeelightClient
 
         var flow = new ColorFlow(1, ColorFlowEndAction.Keep)
         {
-            GetRandomColor(300),
-            GetRandomColor(300),
-            GetRandomColor(400),
+            GetRandomColorAndBrightness(300),
+            GetRandomColorAndBrightness(300),
+            GetRandomColorAndBrightness(400),
         };
 
         await device.StartColorFlow(flow);
         await UniTask.Delay(1000);
         isRunning = false;
     }
+    
+    private bool isBooRunning = false;
+    public async UniTask Boo()
+    {
+        if (!IsConnected()) return;
+        if (isBooRunning) return;
+        
+        isBooRunning = true;
+        await device.StopColorFlow();
+        var (r, g, b) = GetRGBRandomly();
+        var flow = new ColorFlow(1, ColorFlowEndAction.Keep)
+        {
+            new ColorFlowRGBExpression(r, g, b, 100, 100),
+            new ColorFlowRGBExpression(r, g, b, 100, 2800),
+            new ColorFlowRGBExpression(r, g, b, 1, 100),
+        };
+        await device.StartColorFlow(flow);
+        await UniTask.Delay(3000);
+        isBooRunning = false;
+    }
+
 
     public async UniTask Toggle()
     {
@@ -140,10 +164,15 @@ public class YeelightClient
         await device.SetRGBColor((int)color.r, (int)color.g, (int)color.b);
     }
     
-    private ColorFlowRGBExpression GetRandomColor(int duration)
+    private ColorFlowRGBExpression GetRandomColorAndBrightness(int duration)
+    {
+        var brightness = Random.Range(1, 8);
+        return GetRandomColor(brightness, duration);
+    }
+    
+    private ColorFlowRGBExpression GetRandomColor(int brightness, int duration)
     {
         var color = Random.Range(1, 8);
-        var brightness = Random.Range(1, 8);
         return color switch
         {
             1 => new ColorFlowRGBExpression(255, 255,   0, brightness, duration),
@@ -154,5 +183,13 @@ public class YeelightClient
             6 => new ColorFlowRGBExpression(  0,   0, 255, brightness, duration),
             _ => new ColorFlowRGBExpression(255, 255, 255, brightness, duration)
         };
+    }
+
+    private Tuple<int, int, int> GetRGBRandomly()
+    {
+        var r = Random.Range(0, 256);
+        var g = Random.Range(0, 256);
+        var b = Random.Range(0, 256);
+        return new Tuple<int, int, int>(r, g, b);
     }
 }
