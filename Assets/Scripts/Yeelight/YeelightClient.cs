@@ -82,12 +82,12 @@ public class YeelightClient
         var flow = new ColorFlow(1, ColorFlowEndAction.Keep)
         {
             GetRandomColor(300),
-            GetRandomColor(300),
-            GetRandomColor(400),
+            // GetRandomColor(300),
+            // GetRandomColor(400),
         };
 
-        await device.StartColorFlow(flow); // start
-        await UniTask.Delay(1000); // wait for 1 second
+        await device.StartColorFlow(flow);
+        await UniTask.Delay(300);
         isRunning = false;
     }
 
