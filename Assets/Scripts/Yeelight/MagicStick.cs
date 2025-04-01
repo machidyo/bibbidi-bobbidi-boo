@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
-using R3;
 using RyapUnity.Network;
 
 public class MagicStick : MonoBehaviour
@@ -19,7 +18,7 @@ public class MagicStick : MonoBehaviour
     [SerializeField] private Text smallCircleText;
     [SerializeField] private Text bigShakeText;
 
-    private ReactiveProperty<MagicStats> magicStats = new (MagicStats.None);
+    private MagicStats magicStats = MagicStats.None;
     
     private float bibbidiChargeTime = 0;
     private float bibbidiStoppingTime = 0;
@@ -44,7 +43,7 @@ public class MagicStick : MonoBehaviour
 
     void Update()
     {
-        if (magicStats.Value == MagicStats.Boo)
+        if (magicStats == MagicStats.Boo)
         {
             booTime += Time.deltaTime;
             if (booTime < 3.0)
@@ -55,7 +54,7 @@ public class MagicStick : MonoBehaviour
             else
             {
                 Debug.Log("Boo time over");
-                magicStats.Value = MagicStats.None;
+                magicStats = MagicStats.None;
                 booTime = 0;
             }
         }
@@ -104,7 +103,7 @@ public class MagicStick : MonoBehaviour
         // change the light color by Bibbidi-Bobbidi-Boo and reset
         if (bibbidiChargeTime >= 0.5 && booCharge >= 1)
         {
-            magicStats.Value = MagicStats.Boo;
+            magicStats = MagicStats.Boo;
 
             bibbidiChargeTime = 0;
             bibbidiStoppingTime = 0;
@@ -112,11 +111,11 @@ public class MagicStick : MonoBehaviour
         }
         else if (bibbidiChargeTime > 0.0)
         {
-            magicStats.Value = MagicStats.Bibbidi;
+            magicStats = MagicStats.Bibbidi;
         }
         else
         {
-            magicStats.Value = MagicStats.None;
+            magicStats = MagicStats.None;
             
             bibbidiChargeTime = 0;
             booCharge = 0;
@@ -131,7 +130,7 @@ public class MagicStick : MonoBehaviour
         {
             try
             {
-                switch (magicStats.Value)
+                switch (magicStats)
                 {
                     case MagicStats.None:
                         Debug.Log("TurnOff");
