@@ -7,6 +7,11 @@ using RyapUnity.Network;
 
 public class MagicStick : MonoBehaviour
 {
+    private const float BIBBIDI_TIME_THRESHOLD = 0.5f;
+    private const float BIBBIDI_STOP_TIME_THRESHOLD = 0.6f;
+    private const float BIBBIDI_ACCELERATION_THRESHOLD = 1.5f;
+    private const float BOO_ACCELERATION_THRESHOLD = 5.0f;
+    
     private enum MagicStats
     {
         None,
@@ -69,11 +74,11 @@ public class MagicStick : MonoBehaviour
         }
         
         // big shake (to Boo or fault)
-        if (udpReceiver.AccData[0] >= 5 ||
-            udpReceiver.AccData[1] >= 5 ||
-            udpReceiver.AccData[2] >= 5)
+        if (udpReceiver.AccData[0] >= BOO_ACCELERATION_THRESHOLD ||
+            udpReceiver.AccData[1] >= BOO_ACCELERATION_THRESHOLD ||
+            udpReceiver.AccData[2] >= BOO_ACCELERATION_THRESHOLD)
         {
-            if (bibbidiChargeTime < 0.5)
+            if (bibbidiChargeTime < BIBBIDI_TIME_THRESHOLD)
             {
                 Debug.Log($"fault: Boo but you have to do bibbidi before, {bibbidiChargeTime}");
                 bibbidiChargeTime = 0;
@@ -85,9 +90,9 @@ public class MagicStick : MonoBehaviour
             }
         }
         // small circle (to Bibbidi-Bobbidi-)
-        else if (udpReceiver.AccData[0] >= 1.5 ||
-                 udpReceiver.AccData[1] >= 1.5 ||
-                 udpReceiver.AccData[2] >= 1.5)
+        else if (udpReceiver.AccData[0] >= BIBBIDI_ACCELERATION_THRESHOLD ||
+                 udpReceiver.AccData[1] >= BIBBIDI_ACCELERATION_THRESHOLD ||
+                 udpReceiver.AccData[2] >= BIBBIDI_ACCELERATION_THRESHOLD)
         {
             // Debug.Log("Bibbidi");
             bibbidiChargeTime += Time.deltaTime;
@@ -97,7 +102,7 @@ public class MagicStick : MonoBehaviour
         {
             // Debug.Log($"No magic, {bibbidiStoppingTime}");
             bibbidiStoppingTime += Time.deltaTime;
-            if (bibbidiStoppingTime > 0.6)
+            if (bibbidiStoppingTime > BIBBIDI_STOP_TIME_THRESHOLD)
             {
                 bibbidiChargeTime = 0;
             }
@@ -106,7 +111,7 @@ public class MagicStick : MonoBehaviour
         bigShakeText.text = $"{bibbidiChargeTime:F2}, {bibbidiStoppingTime:F2}, {booCharge}";
         
         // change the light color by Bibbidi-Bobbidi-Boo and reset
-        if (bibbidiChargeTime >= 0.5 && booCharge >= 1)
+        if (bibbidiChargeTime >= BIBBIDI_TIME_THRESHOLD && booCharge >= 1)
         {
             magicStats = MagicStats.Boo;
 
