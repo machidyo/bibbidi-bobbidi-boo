@@ -23,6 +23,7 @@ public class MagicStick : MonoBehaviour
     [SerializeField] private SoundManager soundManager;
     [SerializeField] private UDPReceiver udpReceiver;
     
+    [Header("DEBUG")]
     [SerializeField] private Text smallCircleText;
     [SerializeField] private Text bigShakeText;
 
