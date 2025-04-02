@@ -22,8 +22,8 @@ public class SoundManager : MonoBehaviour
 
     private List<Sound> sounds = new()
     {
-        new Sound(SoundNames.BibbidiBobbidi, SoundTypes.SE, "Sounds/magic-turning-spells-casting-SBA-300055780-preview"),
-        new Sound(SoundNames.Boo, SoundTypes.SE, "Sounds/beauty-intro-reveal-logo-2-SBA-300418994-preview"),
+        new Sound(SoundNames.BibbidiBobbidi, SoundTypes.SE, "Sounds/きらきら輝く1"),
+        new Sound(SoundNames.Boo, SoundTypes.SE, "Sounds/magic-turning-spells-casting_MJtx4SEu"),
     };  
 
     // PlaySound が実行される前に AudioSource を設定するために Awake

@@ -64,3 +64,6 @@ crashlytics-build.properties
 # Packges
 Assets/Packages.meta
 Assets/Packages/*
+
+# Paid
+Assets/Resources/Sounds/magic-turning-spells-casting_MJtx4SEu.mp3*
