@@ -163,10 +163,6 @@ public class MagicStick : MonoBehaviour
                         await UniTask.Delay(1000);
                         break;
                     case MagicStats.Bibbidi:
-                        Debug.Log("BibbidiBobbidi");
-                        soundManager.PlaySound(SoundManager.SoundNames.BibbidiBobbidi);
-                        await yeelightClient.BibbidiBobbidi();
-                        break;
                     case MagicStats.Bobbidi:
                         Debug.Log("BibbidiBobbidi");
                         soundManager.PlaySound(SoundManager.SoundNames.BibbidiBobbidi);
