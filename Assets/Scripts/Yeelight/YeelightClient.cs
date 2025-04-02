@@ -35,10 +35,9 @@ public class YeelightClient
 
     ~YeelightClient()
     {
-        Debug.Log("START デコンストラクタ");
         device?.Disconnect();
         device?.Dispose();
-        Debug.Log("END   デコンストラクタ");
+        Debug.Log("YeelightClientを破棄しました。");
     }
     
     public async UniTask TurnOff()
