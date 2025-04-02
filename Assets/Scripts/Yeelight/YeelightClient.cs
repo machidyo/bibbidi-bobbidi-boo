@@ -131,7 +131,6 @@ public class YeelightClient
         isBooRunning = false;
     }
 
-
     public async UniTask Toggle()
     {
         if (!IsConnected()) return;
