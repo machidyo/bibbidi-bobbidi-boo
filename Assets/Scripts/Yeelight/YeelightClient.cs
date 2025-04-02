@@ -41,18 +41,6 @@ public class YeelightClient
         Debug.Log("END   デコンストラクタ");
     }
     
-    public async UniTask<bool> Reconnect()
-    {
-        Debug.Log("Disconnect");
-        device?.Disconnect();
-        Debug.Log("Dispose");
-        device?.Dispose();
-        
-        Debug.Log("Yeelightの再接続を開始します。");
-        device = new Device(YEELIGHT_IP);
-        return await Connect();
-    }
-    
     public async UniTask TurnOff()
     {
         if (!IsConnected()) return;
