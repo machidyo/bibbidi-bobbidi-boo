@@ -505,8 +505,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1378855586}
-        m_TargetAssemblyTypeName: MagicStick, Assembly-CSharp
+      - m_Target: {fileID: 1378855588}
+        m_TargetAssemblyTypeName: MagicStickDebug, Assembly-CSharp
         m_MethodName: OnClicked
         m_Mode: 1
         m_Arguments:
@@ -1017,8 +1017,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1378855586}
-        m_TargetAssemblyTypeName: MagicStick, Assembly-CSharp
+      - m_Target: {fileID: 1378855588}
+        m_TargetAssemblyTypeName: MagicStickDebug, Assembly-CSharp
         m_MethodName: OnClicked2
         m_Mode: 1
         m_Arguments:
@@ -1161,6 +1161,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1378855587}
   - component: {fileID: 1378855586}
+  - component: {fileID: 1378855588}
   m_Layer: 0
   m_Name: MagicStick
   m_TagString: Untagged
@@ -1182,8 +1183,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundManager: {fileID: 762837127}
   udpReceiver: {fileID: 318757438}
-  background: {fileID: 281238626}
-  smallCircleText: {fileID: 1781079892}
   bigShakeText: {fileID: 655007721}
 --- !u!4 &1378855587
 Transform:
@@ -1200,6 +1199,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1378855588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1378855585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8486d59aea0c7ac47909591ed3cf68f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  magicStick: {fileID: 1378855586}
+  background: {fileID: 281238626}
+  smallCircleText: {fileID: 1781079892}
 --- !u!1 &1416797036
 GameObject:
   m_ObjectHideFlags: 0
@@ -1474,8 +1488,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1378855586}
-        m_TargetAssemblyTypeName: MagicStick, Assembly-CSharp
+      - m_Target: {fileID: 1378855588}
+        m_TargetAssemblyTypeName: MagicStickDebug, Assembly-CSharp
         m_MethodName: OnClicked1
         m_Mode: 1
         m_Arguments:

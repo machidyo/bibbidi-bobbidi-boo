@@ -12,7 +12,7 @@ public class MagicStick : MonoBehaviour
     private const float BIBBIDI_ACCELERATION_THRESHOLD = 2.0f;
     private const float BOO_ACCELERATION_THRESHOLD = 7.0f;
     
-    private enum MagicStats
+    public enum MagicStats
     {
         None,
         Bibbidi,
@@ -24,11 +24,9 @@ public class MagicStick : MonoBehaviour
     [SerializeField] private UDPReceiver udpReceiver;
     
     [Header("DEBUG")]
-    [SerializeField] private Image background;
-    [SerializeField] private Text smallCircleText;
     [SerializeField] private Text bigShakeText;
 
-    private MagicStats magicStats = MagicStats.None;
+    public MagicStats MagicStatus { get; private set; } = MagicStats.None;
     
     private float bibbidiChargeTime = 0;
     private float bibbidiStoppingTime = 0;
@@ -36,19 +34,18 @@ public class MagicStick : MonoBehaviour
     private float booTime = 0;
     
     private YeelightClient yeelightClient;
-
-    private CancellationTokenSource yeelightSwithcer;
+    private CancellationTokenSource yeelightCancellationToken;
 
     void Start()
     {
         yeelightClient = new YeelightClient();
-        yeelightSwithcer = new CancellationTokenSource();
-        SwitchYeelightRepeatedlyByMagic(yeelightSwithcer).Forget();
+        yeelightCancellationToken = new CancellationTokenSource();
+        SwitchYeelightRepeatedlyByMagic(yeelightCancellationToken).Forget();
     }
 
     private async void OnApplicationQuit()
     {
-        yeelightSwithcer?.Cancel();
+        yeelightCancellationToken?.Cancel();
         if (yeelightClient != null)
         {
             await yeelightClient.TurnOff();
@@ -57,7 +54,7 @@ public class MagicStick : MonoBehaviour
 
     void Update()
     {
-        if (magicStats == MagicStats.Boo)
+        if (MagicStatus == MagicStats.Boo)
         {
             booTime += Time.deltaTime;
             if (booTime < 3.0)
@@ -68,7 +65,7 @@ public class MagicStick : MonoBehaviour
             else
             {
                 Debug.Log("Boo time over");
-                magicStats = MagicStats.None;
+                MagicStatus = MagicStats.None;
                 booTime = 0;
             }
         }
@@ -110,7 +107,7 @@ public class MagicStick : MonoBehaviour
             {
                 bibbidiChargeTime = 0;
             }
-            else if (magicStats is MagicStats.Bibbidi or MagicStats.Bobbidi)
+            else if (MagicStatus is MagicStats.Bibbidi or MagicStats.Bobbidi)
             {
                 bibbidiChargeTime += Time.deltaTime;
             }
@@ -121,8 +118,7 @@ public class MagicStick : MonoBehaviour
         // change the light color by Bibbidi-Bobbidi-Boo and reset
         if (bibbidiChargeTime >= BIBBIDI_TIME_THRESHOLD && booCharge >= 1)
         {
-            magicStats = MagicStats.Boo;
-            background.color = Color.green;
+            MagicStatus = MagicStats.Boo;
 
             bibbidiChargeTime = 0;
             bibbidiStoppingTime = 0;
@@ -130,23 +126,17 @@ public class MagicStick : MonoBehaviour
         }
         else if (bibbidiChargeTime > 0.0)
         {
-            magicStats = bibbidiChargeTime < BIBBIDI_TIME_THRESHOLD
+            MagicStatus = bibbidiChargeTime < BIBBIDI_TIME_THRESHOLD
                 ? MagicStats.Bibbidi
                 : MagicStats.Bobbidi;
-            background.color = magicStats == MagicStats.Bibbidi
-                ? Color.yellow
-                : Color.cyan;
         }
         else
         {
-            magicStats = MagicStats.None;
-            background.color = Color.gray;
+            MagicStatus = MagicStats.None;
 
             bibbidiChargeTime = 0;
             booCharge = 0;
         }
-        
-        smallCircleText.text = $"{magicStats}";
     }
 
     private async UniTask SwitchYeelightRepeatedlyByMagic(CancellationTokenSource tokenSource)
@@ -155,7 +145,7 @@ public class MagicStick : MonoBehaviour
         {
             try
             {
-                switch (magicStats)
+                switch (MagicStatus)
                 {
                     case MagicStats.None:
                         Debug.Log("TurnOff");
@@ -191,18 +181,18 @@ public class MagicStick : MonoBehaviour
         }
     }
 
-    public async void OnClicked()
+    public async UniTask TurnOff()
     {
         await yeelightClient.TurnOff();
     }
     
-    public async void OnClicked1()
+    public async UniTask BibbidiBobbidi()
     {
         await yeelightClient.BibbidiBobbidi();
     }
     
-    public async void OnClicked2()
+    public async UniTask Boo()
     {
-        await yeelightClient.TurnOn();
+        await yeelightClient.Boo();
     }
 }
