@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 256991977}
   - component: {fileID: 256991976}
   m_Layer: 5
-  m_Name: AccX
+  m_Name: Accs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -434,7 +434,7 @@ GameObject:
   - component: {fileID: 329592928}
   - component: {fileID: 329592927}
   m_Layer: 5
-  m_Name: VirtualMagicStick
+  m_Name: VirtualMagicStick1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -507,7 +507,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1378855588}
         m_TargetAssemblyTypeName: MagicStickDebug, Assembly-CSharp
-        m_MethodName: OnClicked
+        m_MethodName: OnClicked1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -567,7 +567,7 @@ GameObject:
   - component: {fileID: 481511423}
   - component: {fileID: 481511422}
   m_Layer: 5
-  m_Name: AccZ
+  m_Name: Angles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -647,7 +647,7 @@ GameObject:
   - component: {fileID: 619174812}
   - component: {fileID: 619174811}
   m_Layer: 5
-  m_Name: AccY
+  m_Name: Gyro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -727,7 +727,7 @@ GameObject:
   - component: {fileID: 655007722}
   - component: {fileID: 655007721}
   m_Layer: 5
-  m_Name: BigShake
+  m_Name: MagicStickValues
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -946,7 +946,7 @@ GameObject:
   - component: {fileID: 871123920}
   - component: {fileID: 871123919}
   m_Layer: 5
-  m_Name: VirtualMagicStick (2)
+  m_Name: VirtualMagicStick3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1019,7 +1019,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1378855588}
         m_TargetAssemblyTypeName: MagicStickDebug, Assembly-CSharp
-        m_MethodName: OnClicked2
+        m_MethodName: OnClicked3
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1417,7 +1417,7 @@ GameObject:
   - component: {fileID: 1584080525}
   - component: {fileID: 1584080524}
   m_Layer: 5
-  m_Name: VirtualMagicStick (1)
+  m_Name: VirtualMagicStick2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1490,7 +1490,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1378855588}
         m_TargetAssemblyTypeName: MagicStickDebug, Assembly-CSharp
-        m_MethodName: OnClicked1
+        m_MethodName: OnClicked2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1550,7 +1550,7 @@ GameObject:
   - component: {fileID: 1781079893}
   - component: {fileID: 1781079892}
   m_Layer: 5
-  m_Name: SmallCircle
+  m_Name: MagicStickStatus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

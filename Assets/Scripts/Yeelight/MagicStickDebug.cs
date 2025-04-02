@@ -23,17 +23,17 @@ public class MagicStickDebug : MonoBehaviour
         };
     }
 
-    public async void OnClicked()
+    public async void OnClicked1()
     {
         await magicStick.TurnOff();
     }
     
-    public async void OnClicked1()
+    public async void OnClicked2()
     {
         await magicStick.BibbidiBobbidi();
     }
     
-    public async void OnClicked2()
+    public async void OnClicked3()
     {
         await magicStick.Boo();
     }
