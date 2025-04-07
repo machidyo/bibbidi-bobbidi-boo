@@ -78,10 +78,10 @@ public class YeelightClient
         isRunning = false;
     }
 
-    public async UniTask BibbidiBobbidi()
+    public async UniTask<bool> BibbidiBobbidi()
     {
-        if (!IsConnected()) return;
-        if (isRunning) return;
+        if (!IsConnected()) return false;
+        if (isRunning) return false;
         isRunning = true;
         
         var flow = new ColorFlow(1, ColorFlowEndAction.Keep)
@@ -100,6 +100,7 @@ public class YeelightClient
         await BibbidiBobbidi(flow);
             
         isRunning = false;
+        return true;
     }
     
     private async UniTask BibbidiBobbidi(ColorFlow flow)
@@ -112,10 +113,10 @@ public class YeelightClient
     }
     
     private bool isBooRunning = false;
-    public async UniTask Boo()
+    public async UniTask<bool> Boo()
     {
-        if (!IsConnected()) return;
-        if (isBooRunning) return;
+        if (!IsConnected()) return false;
+        if (isBooRunning) return false;
         
         isBooRunning = true;
         await device.StopColorFlow();
@@ -129,6 +130,7 @@ public class YeelightClient
         await device.StartColorFlow(flow);
         await UniTask.Delay(3000);
         isBooRunning = false;
+        return true;
     }
 
     public async UniTask Toggle()

@@ -156,12 +156,22 @@ public class MagicStick : MonoBehaviour
                     case MagicStats.Bobbidi:
                         Debug.Log("BibbidiBobbidi");
                         soundManager.PlaySound(SoundManager.SoundNames.BibbidiBobbidi);
-                        await yeelightClient.BibbidiBobbidi();
+                        var isBibbidiBobbidi = await yeelightClient.BibbidiBobbidi();
+                        if (!isBibbidiBobbidi)
+                        {
+                            Debug.Log("ライトに未接続、あるいはすでに実行中のため、BibbidiBobbidiは1回スキップされました");
+                            await UniTask.Delay(500);
+                        }
                         break;
                     case MagicStats.Boo:
                         Debug.Log("Boo");
                         soundManager.PlaySound(SoundManager.SoundNames.Boo);
-                        await yeelightClient.Boo();
+                        var isBoo = await yeelightClient.Boo();
+                        if (!isBoo)
+                        {
+                            Debug.Log("ライトに未接続、あるいはすでに実行中のため、Booは1回スキップされました");
+                            await UniTask.Delay(500);
+                        }
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
