@@ -11,6 +11,13 @@ namespace RyapUnity.Network
 {
     public class UDPReceiver : MonoBehaviour
     {
+        public enum Stats
+        {
+            Connecting,
+            Connected,
+            Error,
+        }
+        
         private const int DATA_NUMBER = 3;
         private const int DATA__NUMBER = 4;
     
@@ -21,6 +28,8 @@ namespace RyapUnity.Network
         public float[] AhrsData { get; private set; } = new float[DATA__NUMBER];
         public bool IsButtonAClicked = false;
 
+        public Stats Status { get; private set; } = Stats.Connecting;
+        
         private UdpClient udp;
 
         void Start()
@@ -35,6 +44,7 @@ namespace RyapUnity.Network
             Header header = default;
             ImuData imu = default;
             ButtonData button = default;
+            var hasError = false;
             
             while (true)
             {
@@ -70,11 +80,23 @@ namespace RyapUnity.Network
                 }
                 catch (Exception e)
                 {
+                    hasError = true;
                     Debug.Log(e);
                 }
 
-                // 1ms is less than Ryap(10ms) and a little wait for unlock main thread
-                yield return new WaitForSeconds(0.001f);
+                if (hasError)
+                {
+                    Status = Stats.Error;
+                    Debug.Log("エラーが起こっているので3秒待機します。");
+                    yield return new WaitForSeconds(3f);
+                    hasError = false;
+                }
+                else
+                {
+                    Status = Stats.Connected;
+                    // 1ms is less than Ryap(10ms) and a little wait for unlock main thread
+                    yield return new WaitForSeconds(0.001f);
+                }
             }
         }
 

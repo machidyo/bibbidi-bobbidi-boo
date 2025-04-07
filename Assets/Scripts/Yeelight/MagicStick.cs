@@ -17,7 +17,8 @@ public class MagicStick : MonoBehaviour
         None,
         Bibbidi,
         Bobbidi,
-        Boo
+        Boo,
+        Debug,
     }
     
     [SerializeField] private SoundManager soundManager;
@@ -54,6 +55,7 @@ public class MagicStick : MonoBehaviour
 
     void Update()
     {
+        if (MagicStatus == MagicStats.Debug) return;
         if (MagicStatus == MagicStats.Boo)
         {
             booTime += Time.deltaTime;
@@ -173,6 +175,10 @@ public class MagicStick : MonoBehaviour
                             await UniTask.Delay(500);
                         }
                         break;
+                    case MagicStats.Debug:
+                        // Debug Modeのときは何もせずに1秒待つ
+                        await UniTask.Delay(1000);
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -182,15 +188,20 @@ public class MagicStick : MonoBehaviour
                 Debug.LogWarning($"Yeelightとの接続に問題が発生しました、再接続にトライします。{e}");
                 
                 // 少し間をおいてから接続に再挑戦する
-                await UniTask.Delay(500);
+                await UniTask.Delay(3000);
 
                 yeelightClient = new YeelightClient();
 
-                await UniTask.Delay(500);
+                await UniTask.Delay(1000);
             }
         }
     }
 
+    public void SwitchDebugMode(bool isDebug)
+    {
+        MagicStatus = isDebug ? MagicStats.Debug : MagicStats.None;
+    }
+    
     public async UniTask TurnOff()
     {
         await yeelightClient.TurnOff();

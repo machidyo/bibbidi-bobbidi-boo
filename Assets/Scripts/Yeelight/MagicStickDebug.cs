@@ -8,6 +8,7 @@ public class MagicStickDebug : MonoBehaviour
     
     [SerializeField] private Image background;
     [SerializeField] private Text smallCircleText;
+    [SerializeField] private GameObject manualOperationPanel;
 
     void Update()
     {
@@ -19,8 +20,15 @@ public class MagicStickDebug : MonoBehaviour
             MagicStick.MagicStats.Bibbidi => Color.yellow,
             MagicStick.MagicStats.Bobbidi => Color.cyan,
             MagicStick.MagicStats.Boo => Color.green,
+            MagicStick.MagicStats.Debug => Color.magenta,
             _ => throw new ArgumentOutOfRangeException()
         };
+    }
+    
+    public void OnManualOperationToggleSwitched(Toggle toggle)
+    {
+        magicStick.SwitchDebugMode(toggle.isOn);
+        manualOperationPanel.SetActive(toggle.isOn);
     }
 
     public async void OnClicked1()

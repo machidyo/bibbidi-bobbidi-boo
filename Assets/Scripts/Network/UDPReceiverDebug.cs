@@ -4,6 +4,7 @@ using RyapUnity.Network;
 
 public class UDPReceiverDebug : MonoBehaviour
 {
+    [SerializeField] private Text status;
     [SerializeField] private Text acc;
     [SerializeField] private Text gyro;
     [SerializeField] private Text angle;
@@ -19,12 +20,13 @@ public class UDPReceiverDebug : MonoBehaviour
     {
         CheckM5StickCAButton();
 
-        if (acc == null || gyro == null || angle == null)
+        if (status == null || acc == null || gyro == null || angle == null)
         {
             Debug.LogError("Text components are not assigned.");
             return;
         }
         
+        status.text = $"{udpReceiver.Status}";
         acc.text = $"{udpReceiver.AccData[0]:F2}, {udpReceiver.AccData[1]:F2}, {udpReceiver.AccData[2]:F2}";
         gyro.text = $"{udpReceiver.GyroData[0]:F2}, {udpReceiver.GyroData[1]:F2}, {udpReceiver.GyroData[2]:F2}";
         var agl = new Quaternion(
