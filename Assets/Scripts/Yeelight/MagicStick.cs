@@ -7,10 +7,10 @@ using RyapUnity.Network;
 
 public class MagicStick : MonoBehaviour
 {
-    private const float BIBBIDI_TIME_THRESHOLD = 1.0f;
-    private const float BIBBIDI_STOP_TIME_THRESHOLD = 1.0f;
-    private const float BIBBIDI_ACCELERATION_THRESHOLD = 2.0f;
-    private const float BOO_ACCELERATION_THRESHOLD = 7.0f;
+    private const float BIBBIDI_TIME_THRESHOLD = 0.5f;
+    private const float BIBBIDI_STOP_TIME_THRESHOLD = 1.5f;
+    private const float BIBBIDI_ACCELERATION_THRESHOLD = 1.2f;
+    private const float BOO_ACCELERATION_THRESHOLD = 3.0f;
     
     public enum MagicStats
     {
