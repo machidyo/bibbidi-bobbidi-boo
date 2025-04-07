@@ -16,11 +16,11 @@ public class MagicStickDebug : MonoBehaviour
 
         background.color = magicStick.MagicStatus switch
         {
-            MagicStick.MagicStats.None => Color.gray,
-            MagicStick.MagicStats.Bibbidi => Color.yellow,
-            MagicStick.MagicStats.Bobbidi => Color.cyan,
-            MagicStick.MagicStats.Boo => Color.green,
-            MagicStick.MagicStats.Debug => Color.magenta,
+            MagicStick.MagicStats.None => Constants.GRAYLISH_LIGHT_YELLOW,
+            MagicStick.MagicStats.Bibbidi => Constants.YELLOW,
+            MagicStick.MagicStats.Bobbidi => Constants.YELLOW_GREEN,
+            MagicStick.MagicStats.Boo => Constants.GREEN,
+            MagicStick.MagicStats.Debug => Constants.MAGENTA,
             _ => throw new ArgumentOutOfRangeException()
         };
     }
