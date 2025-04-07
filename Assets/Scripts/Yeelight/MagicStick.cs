@@ -21,6 +21,13 @@ public class MagicStick : MonoBehaviour
         Debug,
     }
     
+    public enum YeelightStats
+    {
+        Connecting,
+        Connected,
+        Error,
+    }
+    
     [SerializeField] private SoundManager soundManager;
     [SerializeField] private UDPReceiver udpReceiver;
     
@@ -28,6 +35,7 @@ public class MagicStick : MonoBehaviour
     [SerializeField] private Text bigShakeText;
 
     public MagicStats MagicStatus { get; private set; } = MagicStats.None;
+    public YeelightStats YeelightStatus { get; private set; } = YeelightStats.Connecting;
     
     private float bibbidiChargeTime = 0;
     private float bibbidiStoppingTime = 0;
@@ -35,11 +43,14 @@ public class MagicStick : MonoBehaviour
     private float booTime = 0;
     
     private YeelightClient yeelightClient;
+    private CancellationTokenSource yeelightHealthChaeckCanellationToken;
     private CancellationTokenSource yeelightCancellationToken;
 
     void Start()
     {
         yeelightClient = new YeelightClient();
+        yeelightHealthChaeckCanellationToken = new CancellationTokenSource();
+        ExecuteHealthCheck(yeelightHealthChaeckCanellationToken).Forget();
         yeelightCancellationToken = new CancellationTokenSource();
         SwitchYeelightRepeatedlyByMagic(yeelightCancellationToken).Forget();
     }
@@ -141,6 +152,48 @@ public class MagicStick : MonoBehaviour
         }
     }
 
+    private int disconnectedCount = 0;
+    private async UniTask ExecuteHealthCheck(CancellationTokenSource token)
+    {
+        while (!token.IsCancellationRequested)
+        {
+            try
+            {
+                if (yeelightClient.IsConnected())
+                {
+                    YeelightStatus = YeelightStats.Connected;
+                    disconnectedCount = 0;
+                }
+                else
+                {
+                    YeelightStatus = YeelightStats.Connecting;
+                    disconnectedCount++;
+                    
+                    if (disconnectedCount < 10)
+                    {
+                        Debug.LogWarning($"Yeelightとの接続に問題が発生している可能性があります。チェック{disconnectedCount}回目。");
+                    }
+                    else
+                    {
+                        throw new ApplicationException($"Yeelightとの死活監視（チェック{disconnectedCount}回目）に検出されました");
+                    }
+                }
+
+                await UniTask.Delay(1000, cancellationToken: token.Token);
+            }
+            catch (Exception e)
+            {
+                YeelightStatus = YeelightStats.Error;
+                Debug.LogError($"Yeelightとの接続に問題が発生しました、再接続にトライします。{e}");
+                
+                // 少し間をおいてから接続に再挑戦する
+                await UniTask.Delay(3000, cancellationToken: token.Token);
+                disconnectedCount = 0;
+                //await Reconnect();
+            }
+        }
+    }
+
     private async UniTask SwitchYeelightRepeatedlyByMagic(CancellationTokenSource tokenSource)
     {
         while (!tokenSource.IsCancellationRequested)
@@ -185,14 +238,8 @@ public class MagicStick : MonoBehaviour
             }
             catch (Exception e)
             {
-                Debug.LogWarning($"Yeelightとの接続に問題が発生しました、再接続にトライします。{e}");
-                
-                // 少し間をおいてから接続に再挑戦する
+                Debug.LogWarning($"Yeelightとの間で何かしらの問題（{e}）が発生しました。少し間を置いてからリトライします。");
                 await UniTask.Delay(3000);
-
-                yeelightClient = new YeelightClient();
-
-                await UniTask.Delay(1000);
             }
         }
     }
@@ -200,6 +247,12 @@ public class MagicStick : MonoBehaviour
     public void SwitchDebugMode(bool isDebug)
     {
         MagicStatus = isDebug ? MagicStats.Debug : MagicStats.None;
+    }
+    
+    public async UniTask Reconnect()
+    {
+        yeelightClient = new YeelightClient();
+        await UniTask.Delay(1000);
     }
     
     public async UniTask TurnOff()

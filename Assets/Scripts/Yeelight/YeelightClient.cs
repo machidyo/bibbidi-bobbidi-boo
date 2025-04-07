@@ -139,7 +139,7 @@ public class YeelightClient
         await device.Toggle();
     }
 
-    private bool IsConnected()
+    public bool IsConnected()
     {
         if (device is not { IsConnected: true })
         {
