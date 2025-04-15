@@ -155,6 +155,9 @@ public class MagicStick : MonoBehaviour
     private int disconnectedCount = 0;
     private async UniTask ExecuteHealthCheck(CancellationTokenSource token)
     {
+        // 初期起動時は3秒待ってからチェックするようにする
+        await UniTask.Delay(3000, cancellationToken: token.Token);
+        
         while (!token.IsCancellationRequested)
         {
             try
@@ -169,7 +172,7 @@ public class MagicStick : MonoBehaviour
                     YeelightStatus = YeelightStats.Connecting;
                     disconnectedCount++;
                     
-                    if (disconnectedCount < 10)
+                    if (disconnectedCount < 3)
                     {
                         Debug.LogWarning($"Yeelightとの接続に問題が発生している可能性があります。チェック{disconnectedCount}回目。");
                     }
@@ -179,7 +182,7 @@ public class MagicStick : MonoBehaviour
                     }
                 }
 
-                await UniTask.Delay(1000, cancellationToken: token.Token);
+                await UniTask.Delay(30000, cancellationToken: token.Token);
             }
             catch (Exception e)
             {
@@ -194,6 +197,7 @@ public class MagicStick : MonoBehaviour
         }
     }
 
+    private bool isYeelgihtOn = false;
     private async UniTask SwitchYeelightRepeatedlyByMagic(CancellationTokenSource tokenSource)
     {
         while (!tokenSource.IsCancellationRequested)
@@ -203,16 +207,30 @@ public class MagicStick : MonoBehaviour
                 switch (MagicStatus)
                 {
                     case MagicStats.None:
-                        Debug.Log("TurnOff");
-                        await yeelightClient.TurnOff();
-                        await UniTask.Delay(1000);
+                        if (isYeelgihtOn)
+                        {
+                            Debug.Log("None : TurnOff");
+                            isYeelgihtOn = false;
+                            await yeelightClient.TurnOff();
+                            await UniTask.Delay(1000);
+                        }
+                        else
+                        {
+                            Debug.Log("None : Wainting...");
+                            await UniTask.Delay(500);
+                        }
                         break;
                     case MagicStats.Bibbidi:
                     case MagicStats.Bobbidi:
                         Debug.Log("BibbidiBobbidi");
                         soundManager.PlaySound(SoundManager.SoundNames.BibbidiBobbidi);
                         var isBibbidiBobbidi = await yeelightClient.BibbidiBobbidi();
-                        if (!isBibbidiBobbidi)
+                        if (isBibbidiBobbidi)
+                        {
+                            isYeelgihtOn = true;
+                            await UniTask.Delay(1000);
+                        }
+                        else
                         {
                             Debug.Log("ライトに未接続、あるいはすでに実行中のため、BibbidiBobbidiは1回スキップされました");
                             await UniTask.Delay(500);
@@ -222,7 +240,12 @@ public class MagicStick : MonoBehaviour
                         Debug.Log("Boo");
                         soundManager.PlaySound(SoundManager.SoundNames.Boo);
                         var isBoo = await yeelightClient.Boo();
-                        if (!isBoo)
+                        if (isBoo)
+                        {
+                            isYeelgihtOn = true;
+                            await UniTask.Delay(1000);
+                        }
+                        else
                         {
                             Debug.Log("ライトに未接続、あるいはすでに実行中のため、Booは1回スキップされました");
                             await UniTask.Delay(500);
