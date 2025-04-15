@@ -11,7 +11,7 @@ https://user-images.githubusercontent.com/1772636/120218272-72072d80-c274-11eb-8
 # What you need
 * A wand with magic
 * M5StickC
-  * Install [Ryap](https://github.com/machidyo/RyapY) and interact with the Unity part of this repository via wifi.
+  * Install [Ryap](https://github.com/machidyo/Ryap) and interact with the Unity part of this repository via wifi.
 * [Yeelight](https://en.yeelight.com/product/819.html) 
   * The video uses [YLDP13YL](https://www.amazon.co.jp/dp/B086LPJHMT).
   * Operated via Wi-Fi using the [YeelightAPI](https://github.com/roddone/YeelightAPI).
